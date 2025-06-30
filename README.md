@@ -1,20 +1,24 @@
-# LCloud - Cloud Storage
+# 🌩️ LCloud - Cloud Storage Platform
 
-A Flask-based cloud storage application that allows users to upload, manage, and store files securely. Features include user authentication, email verification, subscription management with Stripe, and file management capabilities.
+**LCloud** is a Flask-based cloud storage application that allows users to securely upload, manage, and store files. Key features include user authentication, email verification, Stripe-based subscription plans, and robust file handling.
 
-## Features
+---
 
-- **User Authentication**: Secure registration and login system with email verification
-- **File Management**: Upload, rename, delete, and organize files
-- **Storage Management**: Track storage usage with configurable limits
-- **Subscription System**: Premium plans with Stripe integration
-- **Email Notifications**: Account verification and password reset emails
-- **Responsive Design**: Works on desktop and mobile devices
-- **Security**: Password hashing, secure file handling, and input validation
+## 🚀 Features
 
-## Tech Stack
+- 🔐 **User Authentication**: Secure login, registration, and email verification  
+- 📂 **File Management**: Upload, rename, delete, and organize files  
+- 📊 **Storage Tracking**: Configurable storage limits and usage tracking  
+- 💳 **Subscription Plans**: Premium plan support via Stripe integration  
+- ✉️ **Email Notifications**: Account verification and password reset via Gmail  
+- 📱 **Responsive UI**: Fully functional on desktop and mobile  
+- 🛡️ **Security First**: Password hashing, input validation, secure file handling  
 
-```bash
+---
+
+## 🛠️ Tech Stack
+
+```python
 from flask import Flask, render_template, redirect, url_for, request, flash, send_from_directory, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
@@ -38,13 +42,17 @@ import time
 from datetime import datetime
 ```
 
-## Prerequisites
+---
+
+## ✅ Prerequisites
 
 - Python 3.7+
 - Gmail account (for email functionality)
-- Stripe account (for subscription features)
+- Stripe account (for subscriptions)
 
-## Installation
+---
+
+## 📦 Installation
 
 ### 1. Clone the Repository
 
@@ -53,56 +61,60 @@ git clone https://github.com/GeorgeLorentzos/lcloud.git
 cd lcloud
 ```
 
-### 3. Install Dependencies
-
-```bash
-pip install flask flask-sqlalchemy flask-login flask-wtf wtforms flask-bcrypt python-dotenv werkzeug stripe pytz flask-mail python-dateutil apscheduler
-```
-
-Or install `requirements.txt` file:
+### 2. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Environment Configuration
+Or manually:
 
-If you already have a `.env` file, please verify it includes the following variables:
+```bash
+pip install flask flask-sqlalchemy flask-login flask-wtf wtforms flask-bcrypt python-dotenv werkzeug stripe pytz flask-mail python-dateutil apscheduler
+```
+
+---
+
+### 3. Environment Configuration
+
+Create a `.env` file in the root directory and add:
 
 ```env
 # Flask Configuration
 SECRET_KEY=your-secret-key-here
 
-# Email Configuration (Gmail)
+# Gmail SMTP Configuration
 MAIL_USERNAME=your-email@gmail.com
 MAIL_PASSWORD=your-app-password
 
-# Stripe Configuration
+# Stripe API Keys
 STRIPE_PUBLISHABLE_KEY=pk_test_your_publishable_key
 STRIPE_SECRET_KEY=sk_test_your_secret_key
 STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
 ```
 
-Update the values as needed.
+---
 
-## Running the Application
+## ▶️ Running the Application
 
 ```bash
 python app.py
 ```
 
-The application will be available at `http://127.0.0.1:5000`
+Then visit: [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
-## Project Structure
+---
+
+## 🗂️ Project Structure
 
 ```
 lcloud/
-├── app.py            
-├── .env                   
-├── requirements.txt  
-├── lcloud.db          
-├── storage/          
-├── templates/          
+├── app.py
+├── .env
+├── requirements.txt
+├── lcloud.db
+├── storage/
+├── templates/
 │   ├── dashboard.html
 │   ├── login.html
 │   ├── register.html
@@ -112,58 +124,70 @@ lcloud/
 │   ├── reset-password.html
 │   ├── request-password-reset.html
 │   └── 404.html
-└── static/              # CSS, JS, images
+└── static/
     ├── css/
     ├── js/
     └── images/
 ```
 
-## Usage
+---
 
-### User Registration
-1. Visit `/signup` to create new account
-2. Check email for verification link
-3. Click verification link to activate account
+## 👥 Usage
 
-### File Management
-1. Login to access dashboard
-2. Upload files using the upload form
-3. Rename files by clicking the rename button
-4. Delete files using the delete button
+### 🔐 Registering an Account
 
-### Subscription Management
-1. Go to Account settings
-2. Click "Upgrade to Premium" for more storage
-3. Complete Stripe checkout process
-4. Manage subscription through billing portal
+1. Go to `/signup`
+2. Fill out the form
+3. Check your email and click the verification link
 
-## Configuration Options
+### 📁 Managing Files
 
-### Storage Limits
-- **Free Plan**: 2GB storage
-- **Premium Plan**: 10GB storage
+- Upload files via the dashboard
+- Rename and delete files with ease
+- Monitor storage usage
 
-### File Upload
-- Secure filename handling
-- Duplicate file prevention
-- Storage quota enforcement
+### 💳 Upgrading Your Plan
 
-### Email Settings
-- SMTP server: Gmail
-- TLS encryption enabled
-- Template-based HTML emails
+1. Go to **Account Settings**
+2. Click "Upgrade to Premium"
+3. Complete payment via Stripe
+4. Manage your billing via the customer portal
 
-## Security Considerations
+---
 
-- Passwords are hashed using bcrypt
-- File names are sanitized using `secure_filename()`
-- SQL injection protection via SQLAlchemy ORM
-- CSRF protection with Flask-WTF
-- Input validation on all forms
+## ⚙️ Configuration Options
 
-## License
+### 🔒 Storage Limits
 
-Copyright (c) 2025 George Lorentzos
+- **Free Plan**: 2GB
+- **Premium Plan**: 10GB
 
-Permission is granted to view this code for personal or educational purposes only. 
-Any reproduction, redistribution, or commercial use is prohibited without written permission.
+### 📤 Upload Handling
+
+- Filenames sanitized with `secure_filename()`
+- Duplicate file checks
+- Enforced storage quota
+
+### 📧 Email Setup
+
+- Gmail SMTP
+- TLS enabled
+- HTML-based email templates
+
+---
+
+## 🔐 Security
+
+- Passwords hashed using **bcrypt**
+- Secure filenames using **Werkzeug**
+- ORM-based SQL injection protection via **SQLAlchemy**
+- CSRF protection via **Flask-WTF**
+- Input validation with **WTForms**
+
+---
+
+## 📄 License
+
+**© 2025 George Lorentzos**
+
+For personal or educational use only. Reproduction, redistribution, or commercial use is prohibited without written permission.
