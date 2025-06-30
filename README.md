@@ -31,7 +31,7 @@
     ```bash
     pip install -r requirements.txt
     ```
-3. Set up environment variables in `.env` file:
+3. Create a .env file and set up the environment variables with the following content:
     ```
     SECRET_KEY=your_secret_key
     MAIL_USERNAME=your_email@gmail.com
