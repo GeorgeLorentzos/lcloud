@@ -196,8 +196,4 @@ This software is provided for personal and educational use only. Commercial use,
 
 ---
 
-## Contact
-
-For business inquiries or enterprise licensing, please contact:  
-📧 **georgelorentzos@gmail.com**
 
