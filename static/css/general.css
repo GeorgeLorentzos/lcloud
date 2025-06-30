@@ -1,0 +1,198 @@
+:root {
+     --color-text-primary: #1a1a1a;
+     --color-text-secondary: #666666;
+     --color-text-tertiary: #999999;
+     --color-border: #e5e5e5;
+     --color-border-light: #f0f0f0;
+     --color-bg-primary: #ffffff;
+     --color-bg-secondary: #fafafa;
+     --color-accent: #2563eb;
+     --color-accent-light: #3b82f6;
+     --color-success: #16a34a;
+     --color-danger: #dc2626;
+     --color-warning: #d97706;
+     --border-radius: 6px;
+     --spacing-xs: 0.25rem;
+     --spacing-sm: 0.5rem;
+     --spacing-md: 1rem;
+     --spacing-lg: 1.5rem;
+     --spacing-xl: 2rem;
+}
+ body {
+     background-color: var(--color-bg-primary);
+     color: var(--color-text-primary);
+     font-size: 14px;
+     line-height: 1.5;
+     font-family: sans-serif !important;
+     margin: 0;
+     padding: 0;
+}
+ a {
+     cursor: pointer;
+}
+ #alertContainer {
+     position: fixed;
+     top: var(--spacing-lg);
+     left: 50%;
+     transform: translateX(-50%);
+     width: 100%;
+     max-width: 400px;
+     z-index: 9999;
+     pointer-events: none;
+}
+ .alert {
+     padding: var(--spacing-md);
+     border-radius: var(--border-radius);
+     margin-bottom: var(--spacing-lg);
+     border: 1px solid transparent;
+}
+ .alert-success {
+     background-color: #f0fdf4;
+     color: #166534;
+     border-color: #bbf7d0;
+     text-align: center;
+}
+ .alert-danger {
+     background-color: #fef2f2;
+     color: #991b1b;
+     border-color: #fecaca;
+}
+ .alert-warning {
+     background-color: #fffbeb;
+     color: #92400e;
+     border-color: #fcd34d;
+     text-align: center;
+}
+ .alert-info {
+     background-color: #eff6ff;
+     color: #1e40af;
+     border-color: #93c5fd;
+     text-align: center;
+}
+ .btn {
+     box-sizing: border-box;
+     background-color: #3e6ae1;
+     border: none;
+     color: white;
+     cursor: pointer;
+     width: 100%;
+     border-radius: 4px;
+     font-weight: 550;
+     text-rendering: optimizeLegibility;
+     color-scheme: dark;
+     height: 40px;
+     padding: 0.5rem 1rem;
+     font-size: 14px;
+     transition: opacity 0.2s ease;
+}
+ .btn:hover {
+     opacity: 0.9;
+}
+ .btn-secondary {
+     background-color: var(--color-text-secondary);
+}
+ .btn-success {
+     background-color: var(--color-success);
+}
+ .btn-danger {
+     background-color: var(--color-danger);
+}
+ .btn-warning {
+     background-color: var(--color-warning);
+}
+ input, textarea, select, button {
+     box-sizing: border-box;
+}
+ .modal {
+     display: none;
+     position: fixed;
+     z-index: 1000;
+     left: 0;
+     top: 0;
+     width: 100%;
+     height: 100%;
+     background-color: rgba(180, 180, 180, 0.4);
+     backdrop-filter: blur(6px);
+     -webkit-backdrop-filter: blur(6px);
+}
+ .modal.show {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+}
+ .modal-content {
+     background-color: var(--color-bg-primary);
+     border-radius: var(--border-radius);
+     width: 100%;
+     max-width: 500px;
+     border: 1px solid var(--color-border);
+     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+ .modal-header {
+     padding: var(--spacing-lg);
+     border-bottom: 1px solid var(--color-border-light);
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+}
+ .modal-title {
+     font-size: 18px;
+     font-weight: 600;
+     color: var(--color-text-primary);
+     margin: 0;
+}
+ .modal-close {
+     background: none;
+     border: none;
+     font-size: 20px;
+     color: var(--color-text-secondary);
+     cursor: pointer;
+     padding: 0;
+     width: 24px;
+     height: 24px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+}
+ .modal-close:hover {
+     color: var(--color-text-primary);
+}
+ .modal-body {
+     padding: var(--spacing-lg);
+}
+ .modal-footer {
+     padding: var(--spacing-lg);
+     border-top: 1px solid var(--color-border-light);
+     display: flex;
+     gap: var(--spacing-sm);
+     justify-content: flex-end;
+     align-items: center;
+}
+ .modal-footer .btn {
+     padding: 8px 16px;
+     min-width: 80px;
+     width: auto;
+     box-sizing: border-box;
+     text-align: center;
+     border-radius: var(--border-radius);
+     border: 1px solid var(--color-border);
+     background-color: var(--color-bg-primary);
+     color: var(--color-text-primary);
+     font-size: 14px;
+     font-weight: 500;
+     cursor: pointer;
+     transition: all 0.2s ease;
+     white-space: nowrap;
+}
+ .modal-footer .btn-danger {
+     background-color: var(--color-danger);
+     color: white;
+     border-color: var(--color-danger);
+     text-decoration: none;
+}
+ .modal-footer .btn-primary {
+     background-color: var(--color-accent);
+     color: white;
+     border-color: var(--color-accent);
+     text-decoration: none;
+}

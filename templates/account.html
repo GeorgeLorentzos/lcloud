@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Account</title>
+      <link rel="stylesheet" href="{{ url_for('static',filename='css/general.css')}}">
+      <script src="{{ url_for('static',filename='js/general.js')}}"></script>
+      <link 
+         rel="stylesheet" 
+         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+         >
+      <style>
+         :root {
+         --color-text-primary: #1a1a1a;
+         --color-text-secondary: #666666;
+         --color-text-tertiary: #999999;
+         --color-border: #e5e5e5;
+         --color-border-light: #f0f0f0;
+         --color-bg-primary: #ffffff;
+         --color-bg-secondary: #fafafa;
+         --color-accent: #2563eb;
+         --color-accent-light: #3b82f6;
+         --color-success: #16a34a;
+         --color-danger: #dc2626;
+         --color-warning: #d97706;
+         --border-radius: 6px;
+         --spacing-xs: 0.25rem;
+         --spacing-sm: 0.5rem;
+         --spacing-md: 1rem;
+         --spacing-lg: 1.5rem;
+         --spacing-xl: 2rem;
+         }
+         [data-theme="dark"] {
+         --color-text-primary: #ffffff;
+         --color-text-secondary: #cccccc;
+         --color-text-tertiary: #999999;
+         --color-border: #404040;
+         --color-border-light: #333333;
+         --color-bg-primary: #1a1a1a;
+         --color-bg-secondary: #2a2a2a;
+         --color-accent: #3b82f6;
+         --color-accent-light: #60a5fa;
+         }
+         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Inter:wght@400;600&family=Roboto:wght@400;600&display=swap');
+         body {
+         background-color: var(--color-bg-primary);
+         color: var(--color-text-primary);
+         font-size: 14px;
+         line-height: 1.5;
+         font-family: 'Montserrat', sans-serif;
+         transition: all 0.3s ease;
+         }
+         body[data-font="inter"] {
+         font-family: 'Inter', sans-serif;
+         }
+         body[data-font="roboto"] {
+         font-family: 'Roboto', sans-serif;
+         }
+         .container {
+         max-width: 1000px;
+         margin: 0 auto;
+         padding: var(--spacing-xl) var(--spacing-lg);
+         }
+         .header {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         padding-bottom: var(--spacing-xl);
+         border-bottom: 1px solid var(--color-border);
+         margin-bottom: var(--spacing-xl);
+         }
+         .header-left {
+         display: flex;
+         align-items: center;
+         gap: var(--spacing-md);
+         }
+         .back-btn {
+         width: 40px;
+         height: 40px;
+         border: 1px solid var(--color-border);
+         border-radius: var(--border-radius);
+         background-color: var(--color-bg-primary);
+         color: var(--color-text-secondary);
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         cursor: pointer;
+         transition: all 0.2s ease;
+         text-decoration: none;
+         font-size: 16px;
+         }
+         .back-btn:hover {
+         background-color: var(--color-bg-secondary);
+         color: var(--color-text-primary);
+         }
+         .page-title {
+         font-size: 20px;
+         font-weight: 600;
+         color: var(--color-text-primary);
+         margin: 0;
+         }
+         .nav-links {
+         display: flex;
+         gap: var(--spacing-lg);
+         }
+         .nav-links a {
+         color: var(--color-text-secondary);
+         text-decoration: none;
+         font-weight: 500;
+         transition: color 0.2s ease;
+         }
+         .nav-links a:hover {
+         color: var(--color-accent);
+         }
+         .main-layout {
+         display: grid;
+         grid-template-columns: 250px 1fr;
+         gap: var(--spacing-xl);
+         }
+         .sidebar {
+         background-color: var(--color-bg-primary);
+         border: 1px solid var(--color-border);
+         border-radius: var(--border-radius);
+         height: fit-content;
+         padding: var(--spacing-lg);
+         }
+         .sidebar-nav {
+         list-style: none;
+         padding: 0;
+         margin: 0;
+         }
+         .sidebar-nav li {
+         margin-bottom: var(--spacing-xs);
+         }
+         .sidebar-nav a {
+         display: block;
+         padding: var(--spacing-md);
+         color: var(--color-text-secondary);
+         text-decoration: none;
+         border-radius: var(--border-radius);
+         transition: all 0.2s ease;
+         font-weight: 500;
+         }
+         .sidebar-nav a:hover,
+         .sidebar-nav a.active {
+         background-color: var(--color-bg-secondary);
+         color: var(--color-text-primary);
+         }
+         .sidebar-nav a.active {
+         background-color: var(--color-accent);
+         color: white;
+         }
+         .content-area {
+         background-color: var(--color-bg-primary);
+         border: 1px solid var(--color-border);
+         border-radius: var(--border-radius);
+         }
+         .section {
+         display: none;
+         }
+         .section.active {
+         display: block;
+         }
+         .section-header {
+         padding: var(--spacing-lg);
+         border-bottom: 1px solid var(--color-border-light);
+         background-color: var(--color-bg-secondary);
+         }
+         .section-title {
+         font-size: 18px;
+         font-weight: 600;
+         color: var(--color-text-primary);
+         margin: 0 0 var(--spacing-xs) 0;
+         }
+         .section-description {
+         color: var(--color-text-secondary);
+         font-size: 14px;
+         margin: 0;
+         }
+         .section-content {
+         padding: var(--spacing-lg);
+         }
+         .form-group {
+         margin-bottom: var(--spacing-lg);
+         }
+         .form-group:last-child {
+         margin-bottom: 1.5rem;
+         }
+         .form-label {
+         display: block;
+         margin-bottom: var(--spacing-sm);
+         font-weight: 600;
+         color: var(--color-text-primary);
+         font-size: 14px;
+         }
+         .form-help {
+         font-size: 12px;
+         color: var(--color-text-secondary);
+         margin-top: var(--spacing-xs);
+         }
+         .form-control {
+         width: 100%;
+         padding: var(--spacing-sm) var(--spacing-md);
+         border: 1px solid var(--color-border);
+         border-radius: var(--border-radius);
+         font-size: 14px;
+         background-color: var(--color-bg-primary);
+         color: var(--color-text-primary);
+         transition: border-color 0.2s ease;
+         }
+         .form-control:focus {
+         outline: none;
+         border-color: var(--color-accent);
+         }
+         .form-control:disabled {
+         background-color: var(--color-bg-secondary);
+         color: var(--color-text-secondary);
+         cursor: not-allowed;
+         }
+         .form-row {
+         display: grid;
+         grid-template-columns: 1fr 1fr;
+         gap: var(--spacing-md);
+         }
+         .btn {
+         padding: var(--spacing-sm) var(--spacing-lg);
+         border: 1px solid var(--color-border);
+         border-radius: var(--border-radius);
+         font-size: 14px;
+         font-weight: 500;
+         cursor: pointer;
+         text-decoration: none;
+         display: inline-flex;
+         align-items: center;
+         justify-content: center;
+         gap: var(--spacing-xs);
+         transition: all 0.2s ease;
+         background-color: var(--color-bg-primary);
+         color: var(--color-text-primary);
+         }
+         .btn:disabled {
+         opacity: 0.5;
+         cursor: not-allowed;
+         }
+         .btn-primary {
+         background-color: var(--color-accent);
+         border-color: var(--color-accent);
+         color: white;
+         }
+         .btn-primary:hover:not(:disabled) {
+         background-color: var(--color-accent-light);
+         border-color: var(--color-accent-light);
+         }
+         .btn-danger {
+         background-color: var(--color-danger);
+         border-color: var(--color-danger);
+         color: white;
+         }
+         .btn-danger:hover:not(:disabled) {
+         background-color: #b91c1c;
+         border-color: #b91c1c;
+         }
+         .btn-group {
+         display: flex;
+         gap: var(--spacing-sm);
+         }
+         .theme-selector {
+         display: grid;
+         grid-template-columns: 1fr 1fr;
+         gap: var(--spacing-sm);
+         margin-top: var(--spacing-sm);
+         }
+         .theme-option {
+         position: relative;
+         cursor: pointer;
+         }
+         .theme-option input {
+         position: absolute;
+         opacity: 0;
+         pointer-events: none;
+         }
+         .theme-card {
+         padding: var(--spacing-md);
+         border: 2px solid var(--color-border);
+         border-radius: var(--border-radius);
+         text-align: center;
+         transition: all 0.2s ease;
+         background-color: var(--color-bg-primary);
+         }
+         .theme-option input:checked + .theme-card {
+         border-color: var(--color-accent);
+         background-color: var(--color-accent);
+         color: white;
+         }
+         .theme-preview {
+         width: 100%;
+         height: 40px;
+         border-radius: calc(var(--border-radius) - 2px);
+         margin-bottom: var(--spacing-sm);
+         display: flex;
+         }
+         .theme-preview.light {
+         background: linear-gradient(45deg, #ffffff 50%, #f8f9fa 50%);
+         }
+         .theme-preview.dark {
+         background: linear-gradient(45deg, #1a1a1a 50%, #2a2a2a 50%);
+         }
+         .font-selector {
+         display: grid;
+         grid-template-columns: 1fr;
+         gap: var(--spacing-sm);
+         margin-top: var(--spacing-sm);
+         }
+         .font-option {
+         position: relative;
+         cursor: pointer;
+         }
+         .font-option input {
+         position: absolute;
+         opacity: 0;
+         pointer-events: none;
+         }
+         .font-card {
+         padding: var(--spacing-md);
+         border: 2px solid var(--color-border);
+         border-radius: var(--border-radius);
+         transition: all 0.2s ease;
+         background-color: var(--color-bg-primary);
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         }
+         .font-option input:checked + .font-card {
+         border-color: var(--color-accent);
+         background-color: rgba(37, 99, 235, 0.1);
+         }
+         .font-preview {
+         font-weight: 600;
+         }
+         .font-preview.montserrat {
+         font-family: 'Montserrat', sans-serif;
+         }
+         .font-preview.inter {
+         font-family: 'Inter', sans-serif;
+         }
+         .font-preview.roboto {
+         font-family: 'Roboto', sans-serif;
+         }
+         .danger-zone {
+         border: 1px solid var(--color-danger);
+         border-radius: var(--border-radius);
+         padding: var(--spacing-lg);
+         background-color: rgba(220, 38, 38, 0.05);
+         margin-top: 1.5rem;
+         }
+         .danger-zone h3 {
+         color: var(--color-danger);
+         font-size: 16px;
+         font-weight: 600;
+         margin: 0 0 var(--spacing-sm) 0;
+         }
+         .danger-zone p {
+         color: var(--color-text-secondary);
+         margin: 0 0 var(--spacing-lg) 0;
+         font-size: 14px;
+         }
+         @media (max-width: 768px) {
+         .container {
+         padding: var(--spacing-lg) var(--spacing-md);
+         }
+         .main-layout {
+         grid-template-columns: 1fr;
+         gap: var(--spacing-lg);
+         }
+         .header {
+         flex-direction: column;
+         align-items: center;
+         gap: var(--spacing-md);
+         }
+         .form-row {
+         grid-template-columns: 1fr;
+         }
+         .theme-selector {
+         grid-template-columns: 1fr;
+         }
+         }
+         .avatar {
+         width: 40px;
+         height: 40px;
+         border-radius: 50%;
+         background-color: var(--color-accent);
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         color: white;
+         font-weight: 600;
+         font-size: 16px;
+         }
+         .initial {
+         user-select: none;
+         -webkit-user-select: none; 
+         -ms-user-select: none;     
+         }
+      </style>
+   </head>
+   <body>
+      <div class="container">
+      <header class="header">
+         <div class="header-left">
+            <div class="avatar" id="userAvatar">
+               <span class="initial"></span>
+            </div>
+            <h1 class="page-title">{{ current_user.username }}</h1>
+         </div>
+         <nav class="nav-links">
+            <a href="/dashboard">Dashboard</a>
+            <a onclick="showLogoutModal()">Logout</a>
+         </nav>
+      </header>
+      <script>
+         function generateColorFromName(name) {
+             let hash = 0;
+             for (let i = 0; i < name.length; i++) {
+                 hash = name.charCodeAt(i) + ((hash << 5) - hash);
+             }
+             const hue = Math.abs(hash % 360);
+             return `hsl(${hue}, 50%, 45%)`;
+         }
+         
+         document.addEventListener("DOMContentLoaded", function () {
+             const userName = "{{ current_user.username }}";
+             const avatar = document.getElementById('userAvatar');
+             const initialSpan = document.querySelector('.initial');
+         
+             if (userName && avatar && initialSpan) {
+                 const initial = userName.charAt(0).toUpperCase();
+                 const bgColor = generateColorFromName(userName);
+                 avatar.style.backgroundColor = bgColor;
+                 initialSpan.textContent = initial;
+             }
+         });
+      </script>
+      <div id="alertContainer">
+         {% with messages = get_flashed_messages(with_categories=true) %}
+         {% if messages %}
+         {% for category, message in messages %}
+         <div class="alert alert-{{ category }}">{{ message }}</div>
+         {% endfor %}
+         {% endif %}
+         {% endwith %}
+      </div>
+      <div class="main-layout">
+      <nav class="sidebar">
+         <ul class="sidebar-nav">
+            <li><a href="#profile" class="nav-item active">Profile</a></li>
+            <li><a href="#account" class="nav-item">Account</a></li>
+            <li><a href="#billing" class="nav-item">Billing</a></li>
+         </ul>
+      </nav>
+      <div class="content-area">
+      <div id="profile" class="section active">
+         <div class="section-header">
+            <h2 class="section-title">Profile</h2>
+            <p class="section-description">Manage your personal information</p>
+         </div>
+         <div class="section-content">
+            <form action="/account" method="post">
+               {{ account_form.hidden_tag() }}
+               <div class="form-group">
+                  <label class="form-label">Username</label>
+                  {{ account_form.username(id="username", placeholder=current_user.username, class="form-control") }}
+               </div>
+               <div class="form-group">
+                  <label class="form-label">Email Address</label>
+                  {{ account_form.email(value=current_user.email, class="form-control") }}
+               </div>
+               <div class="form-group">
+                  <label class="form-label">Current Password</label>
+                  {{ account_form.current_password(class="form-control") }}
+               </div>
+               <div class="form-row">
+                  <div class="form-group">
+                     <label class="form-label">New Password</label>
+                     {{ account_form.new_password(id="new_password", class="form-control") }}
+                  </div>
+                  <div class="form-group">
+                     <label class="form-label">Confirm Password</label>
+                     {{ account_form.confirm_password(id="confirm_password", class="form-control") }}
+                  </div>
+               </div>
+               <div class="btn-group">
+                  {{ account_form.submit(class_="btn btn-primary") }}
+               </div>
+            </form>
+         </div>
+      </div>
+      <div id="account" class="section">
+         <div class="section-header">
+            <h2 class="section-title">Account</h2>
+            <p class="section-description">Account status and data</p>
+         </div>
+         <div class="section-content">
+            <div class="form-group">
+               <label class="form-label">Account Status</label>
+               <input type="text" class="form-control" value="Active" disabled>
+            </div>
+            <div class="form-group">
+               <label class="form-label">Member Since</label>
+               <input type="text" class="form-control" value="{{ current_user.created_at.strftime('%m/%d/%Y %H:%M') }}" disabled>
+            </div>
+            <div class="form-group">
+               <label class="form-label">Storage Used</label>
+               <input type="text" class="form-control" value="{% if total_storage >= 1073741824 %}{{ total_storage_in_gb }} GB / {{ (current_user.maxstorage / 1024**3) | round(2) }} GB{% else %}{{ total_storage_in_mb }} MB / {{ (current_user.maxstorage / 1024**3) | round(2) }} GB{% endif %}" disabled>
+            </div>
+            <div class="btn-group">
+               <button type="button" class="btn" onclick="showLogoutModal()">
+               Logout
+               </button>
+            </div>
+            <div class="danger-zone">
+               <h3><i class="fas fa-exclamation-triangle"></i> Danger Zone</h3>
+               <p>Once you delete your account, there is no going back. Please be certain.</p>
+               <button type="button" class="btn btn-danger" onclick="showDeleteModal()">
+               <i class="fas fa-trash"></i>
+               Delete Account
+               </button>
+            </div>
+         </div>
+      </div>
+      <div id="billing" class="section">
+         <div class="section-header">
+            <h2 class="section-title">Billing</h2>
+            <p class="section-description">Manage your subscription and billing information</p>
+         </div>
+         <div class="section-content">
+            <div class="form-group">
+               <label class="form-label">Current Plan</label>
+               <input type="text" class="form-control" value="{{ current_user.subscription_plan }}" disabled>
+            </div>
+            {% if current_user.subscription_plan != 'Normal' %}
+            <div class="form-group">
+               <label class="form-label">Billing Cycle</label>
+               <input type="text" class="form-control" value="Monthly" disabled>
+            </div>
+            {% else %}
+            <div class="form-group">
+               <label class="form-label">Billing Cycle</label>
+               <input type="text" class="form-control" value="N/A" disabled>
+            </div>
+            {% endif %}
+            <div class="form-group">
+               <label class="form-label">Next Billing Date</label>
+               <input type="text" class="form-control" 
+                  value="{{ current_user.subscription_expiration_date.strftime('%m/%d/%Y') if current_user.subscription_expiration_date else 'N/A' }}" 
+                  disabled>
+            </div>
+            {% if current_user.subscription_before %}
+            <button type="button" class="btn btn-primary" id="manageBillingBtn">
+            Manage Billing
+            </button>
+            <br>   <br>
+            {% else %}
+            {% endif %}
+            {% if current_user.subscription_plan != 'Normal' %}
+            {% else %}
+            <button id="checkout-button" class="btn" style="background: var(--color-accent); color: white;">Buy Premium $20.00 / month</button>
+            {% endif %}
+         </div>
+      </div>
+      <script>
+         function manageBilling() {
+             fetch('/create-billing-portal-session', {
+                 method: 'POST',
+                 headers: {
+                     'Content-Type': 'application/json',
+                 },
+             })
+             .then(response => response.json())
+             .then(data => {
+                 if (data.url) {
+                     window.location.href = data.url;
+                 }
+             })
+             .catch(error => {
+                 console.error('Error:', error);
+                 showAlert('Failed to access billing portal. Please try again.', 'danger');
+             });
+         }
+         
+         document.getElementById('manageBillingBtn').addEventListener('click', manageBilling);
+      </script>
+      <div id="logoutModal" class="modal">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h3 class="modal-title">Confirm Logout</h3>
+               <button class="modal-close" onclick="closeModal('logoutModal')">
+               <i class="fas fa-times"></i>
+               </button>
+            </div>
+            <div class="modal-body">
+               <p>Are you sure you want to logout? You'll need to sign in again to access your account.</p>
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn" onclick="closeModal('logoutModal')">Cancel</button>
+               <a href="/logout" class="btn btn-primary">
+               Logout
+               </a>
+            </div>
+         </div>
+      </div>
+      <div id="deleteModal" class="modal">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h3 class="modal-title">Delete Account</h3>
+               <button class="modal-close" onclick="closeModal('deleteModal')">
+               <i class="fas fa-times"></i>
+               </button>
+            </div>
+            <div class="modal-body">
+               <div class="alert alert-danger">
+                  <strong>Warning:</strong> This action cannot be undone. All your files and data will be permanently deleted.
+               </div>
+               <p>Please type <strong>DELETE</strong> to confirm:</p>
+               <input type="text" class="form-control" id="deleteConfirmation" placeholder="Type DELETE to confirm">
+            </div>
+            <div class="modal-footer">
+               <form action="/delete_account" method="post">
+                  {{ delete_account_form.hidden_tag() }}    
+                  {{ delete_account_form.submit(id="confirmDeleteBtn", class="btn btn-danger", disabled=True) }}
+               </form>
+            </div>
+         </div>
+      </div>
+      <script>
+         document.addEventListener('DOMContentLoaded', () => {
+         const input = document.getElementById('deleteConfirmation');
+         const deleteBtn = document.getElementById('confirmDeleteBtn');
+         
+         input.addEventListener('input', () => {
+         
+         if (input.value === 'DELETE') {
+         deleteBtn.disabled = false;
+         } else {
+         deleteBtn.disabled = true;
+         }
+         });
+         });
+         
+      </script>
+      <div id="twoFAModal" class="modal">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h3 class="modal-title">Enable Two-Factor Authentication</h3>
+               <button class="modal-close" onclick="closeModal('twoFAModal')">
+               <i class="fas fa-times"></i>
+               </button>
+            </div>
+            <div class="modal-body">
+               <p>Two-factor authentication adds an extra layer of security to your account.</p>
+               <div class="form-group">
+                  <label class="form-label">Choose Authentication Method</label>
+                  <select class="form-control" id="twoFAMethod">
+                     <option value="app">Authenticator App (Recommended)</option>
+                     <option value="sms">SMS Text Message</option>
+                     <option value="email">Email</option>
+                  </select>
+               </div>
+               <div class="form-help">
+                  We recommend using an authenticator app like Google Authenticator or Authy for the best security.
+               </div>
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn" onclick="closeModal('twoFAModal')">Cancel</button>
+               <button type="button" class="btn btn-primary" onclick="enable2FA()">
+               <i class="fas fa-shield-alt"></i>
+               Continue Setup
+               </button>
+            </div>
+         </div>
+      </div>
+      <script>
+         function showSection(sectionId) {
+         
+             document.querySelectorAll('.section').forEach(section => {
+                 section.classList.remove('active');
+             });
+         
+             document.querySelectorAll('.nav-item').forEach(item => {
+                 item.classList.remove('active');
+             });
+         
+             document.getElementById(sectionId).classList.add('active');
+         
+             document.querySelector(`a[href="#${sectionId}"]`).classList.add('active');
+         }
+         
+         document.querySelectorAll('.nav-item').forEach(item => {
+             item.addEventListener('click', (e) => {
+                 e.preventDefault();
+                 const sectionId = item.getAttribute('href').substring(1);
+                 showSection(sectionId);
+             });
+         });
+         
+         function showModal(modalId) {
+             document.getElementById(modalId).classList.add('show');
+         }
+         
+         function closeModal(modalId) {
+             document.getElementById(modalId).classList.remove('show');
+         }
+         
+         function showLogoutModal() {
+             showModal('logoutModal');
+         }
+         
+         function showDeleteModal() {
+             showModal('deleteModal');
+         
+             document.getElementById('deleteConfirmation').value = '';
+             document.getElementById('confirmDeleteBtn').disabled = true;
+         }
+         
+         function logout() {
+             window.location.href = '/logout';
+         }
+         
+         
+         document.querySelectorAll('.modal').forEach(modal => {
+             modal.addEventListener('click', function(e) {
+                 if (e.target === this) {
+                     closeModal(this.id);
+                 }
+             });
+         });
+         
+      </script>
+      <script src="https://js.stripe.com/v3/"></script>
+      <script>
+         const stripe = Stripe("{{ stripe_publishable_key }}");
+         
+         document.getElementById("checkout-button").addEventListener("click", () => {
+           fetch("/create-checkout-session", {
+             method: "POST",
+             headers: {
+               "Content-Type": "application/json"
+             }
+           })
+           .then((res) => res.json())
+           .then((data) => {
+             return stripe.redirectToCheckout({ sessionId: data.sessionId });
+           })
+           .catch((error) => console.error("Error:", error));
+         });
+      </script>
+   </body>
+</html>

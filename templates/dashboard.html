@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Dashboard</title>
+      <link rel="stylesheet" href="{{ url_for('static',filename='css/general.css')}}">
+      <script src="{{ url_for('static',filename='js/general.js')}}"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+      <style>
+         :root {
+         --color-text-primary: #1a1a1a;
+         --color-text-secondary: #666666;
+         --color-text-tertiary: #999999;
+         --color-border: #e5e5e5;
+         --color-border-light: #f0f0f0;
+         --color-bg-primary: #ffffff;
+         --color-bg-secondary: #fafafa;
+         --color-accent: #2563eb;
+         --color-accent-light: #3b82f6;
+         --color-success: #16a34a;
+         --color-danger: #dc2626;
+         --color-warning: #d97706;
+         --border-radius: 6px;
+         --spacing-xs: 0.25rem;
+         --spacing-sm: 0.5rem;
+         --spacing-md: 1rem;
+         --spacing-lg: 1.5rem;
+         --spacing-xl: 2rem;
+         }
+         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+         body {
+         background-color: var(--color-bg-primary);
+         color: var(--color-text-primary);
+         font-size: 14px;
+         line-height: 1.5;
+         font-family: 'Montserrat', sans-serif;
+         margin: 0;
+         padding: 0;
+         }
+         .container {
+         max-width: 1000px;
+         margin: 0 auto;
+         padding: var(--spacing-xl) var(--spacing-lg);
+         }
+         .header {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         padding-bottom: var(--spacing-xl);
+         border-bottom: 1px solid var(--color-border);
+         margin-bottom: var(--spacing-xl);
+         }
+         .user-info {
+         display: flex;
+         align-items: center;
+         gap: var(--spacing-md);
+         }
+         .avatar {
+         width: 40px;
+         height: 40px;
+         border-radius: 50%;
+         background-color: var(--color-accent);
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         color: white;
+         font-weight: 600;
+         font-size: 16px;
+         }
+         .username {
+         font-size: 20px;
+         font-weight: 600;
+         color: var(--color-text-primary);
+         margin: 0;
+         }
+         .nav-links {
+         display: flex;
+         gap: var(--spacing-lg);
+         }
+         .nav-links a {
+         color: var(--color-text-secondary);
+         text-decoration: none;
+         font-weight: 500;
+         transition: color 0.2s ease;
+         }
+         .nav-links a:hover {
+         color: var(--color-accent);
+         }
+         .storage-section {
+         background-color: var(--color-bg-secondary);
+         border: 1px solid var(--color-border-light);
+         border-radius: var(--border-radius);
+         padding: var(--spacing-lg);
+         margin-bottom: var(--spacing-xl);
+         }
+         .storage-header {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         margin-bottom: var(--spacing-sm);
+         }
+         .storage-title {
+         font-size: 16px;
+         font-weight: 600;
+         color: var(--color-text-primary);
+         margin: 0;
+         }
+         .storage-usage {
+         font-size: 14px;
+         color: var(--color-text-secondary);
+         }
+         .progress-bar {
+         width: 100%;
+         height: 4px;
+         background-color: var(--color-border-light);
+         border-radius: 2px;
+         overflow: hidden;
+         }
+         .progress-fill {
+         height: 100%;
+         width: 0%;
+         background-color: var(--color-accent);
+         border-radius: 2px;
+         transition: width 0.3s ease;
+         }
+         .main-grid {
+         display: grid;
+         grid-template-columns: 300px 1fr;
+         gap: var(--spacing-xl);
+         }
+         .upload-section {
+         background-color: var(--color-bg-primary);
+         border: 1px solid var(--color-border);
+         border-radius: var(--border-radius);
+         height: 226px;
+         margin-bottom: 1rem;
+         }
+         .section-header {
+         padding: var(--spacing-lg);
+         border-bottom: 1px solid var(--color-border-light);
+         background-color: var(--color-bg-secondary);
+         }
+         .section-title {
+         font-size: 16px;
+         font-weight: 600;
+         color: var(--color-text-primary);
+         margin: 0;
+         }
+         .section-content {
+         padding: var(--spacing-lg);
+         }
+         .form-group {
+         margin-bottom: var(--spacing-lg);
+         }
+         .form-label {
+         display: block;
+         margin-bottom: var(--spacing-sm);
+         font-weight: 500;
+         color: var(--color-text-primary);
+         font-size: 14px;
+         }
+         .form-control {
+         width: calc(100% - 2px);
+         padding: var(--spacing-sm) var(--spacing-md);
+         border: 1px solid var(--color-border);
+         border-radius: var(--border-radius);
+         font-size: 14px;
+         background-color: var(--color-bg-primary);
+         transition: border-color 0.2s ease;
+         }
+         .form-control:focus {
+         outline: none;
+         border-color: var(--color-accent);
+         }
+         input {
+         box-sizing: border-box;
+         }
+         .files-section {
+         background-color: var(--color-bg-primary);
+         border: 1px solid var(--color-border);
+         border-radius: var(--border-radius);
+         }
+         .files-table {
+         width: 100%;
+         border-collapse: collapse;
+         table-layout: fixed;
+         }
+         .files-table th {
+         padding: var(--spacing-md);
+         text-align: left;
+         font-weight: 600;
+         color: var(--color-text-primary);
+         border-bottom: 1px solid var(--color-border-light);
+         font-size: 12px;
+         text-transform: uppercase;
+         letter-spacing: 0.05em;
+         }
+         .files-table td {
+         padding: var(--spacing-md);
+         border-bottom: 1px solid var(--color-border-light);
+         vertical-align: middle;
+         }
+         .files-table tr:hover {
+         background-color: var(--color-bg-secondary);
+         }
+         .file-name {
+         font-weight: 500;
+         color: var(--color-text-primary);
+         font-size: 14px;
+         }
+         .file-meta {
+         color: var(--color-text-secondary);
+         font-size: 13px;
+         }
+         .file-actions {
+         display: inline-flex;
+         gap: var(--spacing-sm);
+         align-items: center;
+         }
+         .action-btn {
+         width: 32px;
+         height: 32px;
+         border: 1px solid var(--color-border);
+         border-radius: var(--border-radius);
+         background-color: var(--color-bg-primary);
+         color: var(--color-text-secondary);
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         cursor: pointer;
+         transition: all 0.2s ease;
+         text-decoration: none;
+         font-size: 13px;
+         }
+         .action-btn:hover {
+         background-color: var(--color-bg-secondary);
+         color: var(--color-text-primary);
+         }
+         .action-btn.download:hover {
+         border-color: var(--color-success);
+         }
+         .action-btn.delete:hover {
+         border-color: var(--color-danger);
+         }
+         .action-btn.rename:hover {
+         border-color: var(--color-warning);
+         }
+         .modal {
+         display: none;
+         position: fixed;
+         z-index: 1000;
+         left: 0;
+         top: 0;
+         width: 100%;
+         height: 100%;
+         background-color: rgba(180, 180, 180, 0.4);
+         backdrop-filter: blur(6px);
+         -webkit-backdrop-filter: blur(6px);
+         }
+         .modal.show {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         }
+         .modal-content {
+         background-color: var(--color-bg-primary);
+         border-radius: var(--border-radius);
+         width: 100%;
+         max-width: 500px;
+         border: 1px solid var(--color-border);
+         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+         }
+         .modal-header {
+         padding: var(--spacing-lg);
+         border-bottom: 1px solid var(--color-border-light);
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         }
+         .modal-title {
+         font-size: 16px;
+         font-weight: 600;
+         color: var(--color-text-primary);
+         margin: 0;
+         }
+         .modal-close {
+         background: none;
+         border: none;
+         font-size: 20px;
+         color: var(--color-text-secondary);
+         cursor: pointer;
+         padding: 0;
+         width: 24px;
+         height: 24px;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         }
+         .modal-close:hover {
+         color: var(--color-text-primary);
+         }
+         .modal-body {
+         padding: var(--spacing-lg);
+         }
+         .modal-footer {
+         padding: var(--spacing-lg);
+         border-top: 1px solid var(--color-border-light);
+         display: flex;
+         gap: var(--spacing-sm);
+         justify-content: flex-end;
+         }
+         .empty-state {
+         text-align: center;
+         padding: var(--spacing-xl);
+         color: var(--color-text-secondary);
+         }
+         .empty-state h4 {
+         color: var(--color-text-primary);
+         margin-bottom: var(--spacing-sm);
+         font-size: 16px;
+         font-weight: 600;
+         }
+         @media (max-width: 768px) {
+         .container {
+         padding: var(--spacing-lg) var(--spacing-md);
+         }
+         .m{
+         display: none;
+         }
+         .main-grid {
+         grid-template-columns: 1fr;
+         gap: var(--spacing-lg);
+         }
+         .header {
+         flex-direction: column;
+         align-items: center;
+         gap: var(--spacing-md);
+         }
+         .nav-links {
+         gap: var(--spacing-md);
+         }
+         .files-table {
+         font-size: 13px;
+         }
+         .files-table th,
+         .files-table td {
+         padding: var(--spacing-sm);
+         }
+         }
+      </style>
+      <style>
+         .custom-file-upload {
+         display: flex;
+         align-items: center;
+         gap: 1rem;
+         }
+         .form-control-file {
+         display: none;
+         }
+         .file-button {
+         background-color: #f4f4f4;
+         color: rgb(0, 0, 0);
+         font-weight: 550;
+         border: 1px solid var(--color-border);
+         padding: 0.5rem 1rem;
+         border-radius: 4px;
+         cursor: pointer;
+         font-weight: 500;
+         font-size: 14px;
+         transition: background 0.2s ease;
+         }
+         .file-button:hover {
+         opacity: 0.9;
+         }
+         #file-name {
+         font-size: 0.9rem;
+         color: #555;
+         }
+         .initial {
+         user-select: none;
+         -webkit-user-select: none;
+         -ms-user-select: none;
+         }
+      </style>
+   </head>
+   <body>
+      <div class="container">
+         <header class="header">
+            <div class="user-info">
+               <div class="avatar" id="userAvatar">
+                  <span class="initial">
+                  </span>
+               </div>
+               <h1 class="username">{{ current_user.username }}</h1>
+            </div>
+            <nav class="nav-links">
+               <a href="/account">Settings</a>
+               <a href="/logout">Logout</a>
+            </nav>
+         </header>
+         <section class="storage-section">
+            <div class="storage-header">
+               <h3 class="storage-title">Storage
+                  {% if total_storage >= current_user.maxstorage %}
+                  (Full)
+                  {% endif %}
+               </h3>
+               <span class="storage-usage">
+               {% if total_storage >= 1073741824 %}
+               {{ total_storage_in_gb }} GB / {{ max_user_account_storage_gb }} GB
+               {% else %}
+               {{ total_storage_in_mb }} MB / {{ max_user_account_storage_gb }} GB
+               {% endif %}
+               </span>
+            </div>
+            <div class="progress-bar">
+               <div class="progress-fill" id="progressFill">
+               </div>
+            </div>
+         </section>
+         <div id="alertContainer">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+         </div>
+         <div class="main-grid">
+            <section class="upload-section">
+               <div class="section-header">
+                  <h2 class="section-title">Upload File</h2>
+               </div>
+               <div class="section-content">
+                  <form method="POST" enctype="multipart/form-data">
+                     {{ file_upload_form.hidden_tag() }}
+                     <div class="form-group custom-file-upload">
+                        {{ file_upload_form.file(class="form-control-file", id="real-file") }}
+                        <label for="real-file" class="file-button">Choose File</label>
+                        <span id="file-name">No file chosen</span>
+                     </div>
+                     {{ file_upload_form.submit(class="btn") }} <br>
+                     <br>
+                  </form>
+               </div>
+            </section>
+            <section class="files-section">
+               <div class="section-header">
+                  <h2 class="section-title">Files</h2>
+               </div>
+               <div class="section-content">
+                  {% if files %}
+                  <table class="files-table">
+                     <thead>
+                        <tr>
+                           <th>Name</th>
+                           <th class="m">Size</th>
+                           <th class="m">Date</th>
+                           <th>Actions</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        {% for f in files %}
+                        <tr>
+                           <td>
+                              <div class="file-name" title="{{ f.filename }}">
+                                 {{ f.filename[:10] }}{% if f.filename|length > 10 %}...{% endif %}
+                              </div>
+                           </td>
+                           <td class="m">
+                              <span class="file-meta">
+                              {% set filesize_mb = (f.filesize / (1024 ** 2)) | round(2) %}
+                              {% set filesize_gb = (f.filesize / (1024 ** 3)) | round(2) %}
+                              {% if f.filesize >= 1073741824 %}
+                              {{ filesize_gb }} GB
+                              {% else %}
+                              {{ filesize_mb }} MB
+                              {% endif %}
+                              </span>
+                           </td>
+                           <td class="m">
+                              <span class="file-meta">{{ f.upload_date.strftime("%Y-%m-%d") }}</span>
+                           </td>
+                           <td>
+                              <div class="file-actions">
+                                 <a href="/download/{{ f.filename }}" class="action-btn download"
+                                    title="Download">
+                                 <i class="fas fa-download">
+                                 </i>
+                                 </a>
+                                 <button class="action-btn rename" onclick="openRenameModal('{{ f.filename }}')"
+                                    title="Rename">
+                                 <i class="fas fa-edit">
+                                 </i>
+                                 </button>
+                                 <a class="action-btn delete" data-filename="{{ f.filename }}" title="Delete">
+                                 <i class="fas fa-trash"></i>
+                                 </a>
+                              </div>
+                           </td>
+                        </tr>
+                        {% endfor %}
+                     </tbody>
+                  </table>
+                  {% else %}
+                  <div class="empty-state">
+                     <h4>No files uploaded</h4>
+                     <p>Upload your first file to get started</p>
+                  </div>
+                  {% endif %}
+               </div>
+            </section>
+         </div>
+      </div>
+      <div id="renameModal" class="modal">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h3 class="modal-title">Rename File</h3>
+               <button class="modal-close" onclick="closeRenameModal()">
+               <i class="fas fa-times">
+               </i>
+               </button>
+            </div>
+            <div class="modal-body">
+               <form id="renameForm" action="/rename" method="POST">
+                  {{ rename_form.hidden_tag() }}
+                  <input type="hidden" name="filename" id="currentFilename">
+                  <div class="form-group">
+                     <label for="newFilename" class="form-label">New file name</label>
+                     {{ rename_form.new_filename(class="form-control", id="newFilename", placeholder="Enter new
+                     name") }}
+                  </div>
+               </form>
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn" onclick="closeRenameModal()">Cancel</button>
+               <button type="submit" form="renameForm" class="btn">Rename</button>
+            </div>
+         </div>
+      </div>
+      <div id="deleteFileModal" class="modal">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h3 class="modal-title">Delete File</h3>
+               <button class="modal-close" onclick="closeModal('deleteFileModal')">
+               <i class="fas fa-times"></i>
+               </button>
+            </div>
+            <div class="modal-body">
+               <p id="deleteFileName">Are you sure you want to delete this file?</p>
+               <form id="deleteForm" action="" method="POST">
+                  <input type="hidden" name="filename" id="deleteFilenameInput">
+               </form>
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn" onclick="closeModal('deleteFileModal')">Cancel</button>
+               <button type="submit" form="deleteForm" class="btn btn-danger" style="background-color: var(--color-danger); color: white;">Delete</button>
+            </div>
+         </div>
+      </div>
+      <div id="logoutModal" class="modal">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h3 class="modal-title">Confirm Logout</h3>
+               <button class="modal-close" onclick="closeModal('logoutModal')">
+               <i class="fas fa-times"></i>
+               </button>
+            </div>
+            <div class="modal-body">
+               <p>Are you sure you want to logout? You'll need to sign in again to access your account.</p>
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn" onclick="closeModal('logoutModal')">Cancel</button>
+               <a href="/logout" class="btn btn-primary" style="background-color: var(--color-accent); color: white;">Logout</a>
+            </div>
+         </div>
+      </div>
+      <script>
+         function openDeleteModal(filename) {
+             document.getElementById('deleteFileName').textContent = `${filename}`;
+             document.getElementById('deleteFilenameInput').value = filename;
+             document.getElementById('deleteForm').action = `/delete/${filename}`;
+             document.getElementById('deleteFileModal').classList.add('show');
+         }
+         
+         function openLogoutModal() {
+             document.getElementById('logoutModal').classList.add('show');
+         }
+         
+         function closeModal(modalId) {
+             document.getElementById(modalId).classList.remove('show');
+         }
+         
+         document.addEventListener('DOMContentLoaded', function() {
+             document.querySelectorAll('.action-btn.delete').forEach(btn => {
+                 btn.addEventListener('click', function(e) {
+                     e.preventDefault();
+                     const filename = this.getAttribute('data-filename');
+                     openDeleteModal(filename);
+                 });
+             });
+         
+             const logoutLink = document.querySelector('a[href="/logout"]');
+             if (logoutLink) {
+                 logoutLink.addEventListener('click', function(e) {
+                     e.preventDefault();
+                     openLogoutModal();
+                 });
+             }
+         
+             const deleteForm = document.getElementById('deleteForm');
+             if (deleteForm) {
+                 deleteForm.addEventListener('submit', function(e) {
+                     e.preventDefault();
+                     fetch(this.action, {
+                         method: 'POST',
+                         body: new FormData(this)
+                     })
+                     .then(response => {
+                         if (response.redirected) {
+                             window.location.href = response.url;
+                         }
+                     })
+                     .catch(error => {
+                         console.error('Error:', error);
+                         window.location.reload();
+                     });
+                 });
+             }
+         
+             document.querySelectorAll('.modal').forEach(modal => {
+                 modal.addEventListener('click', function(e) {
+                     if (e.target === this) {
+                         closeModal(this.id);
+                     }
+                 });
+             });
+         
+             document.addEventListener('keydown', function(e) {
+                 if (e.key === 'Escape') {
+                     document.querySelectorAll('.modal.show').forEach(modal => {
+                         closeModal(modal.id);
+                     });
+                 }
+             });
+         });
+      </script>
+      <script>
+         function generateColorFromName(name) {
+             let hash = 0;
+             for (let i = 0; i < name.length; i++) {
+                 hash = name.charCodeAt(i) + ((hash << 5) - hash);
+             }
+             const hue = Math.abs(hash % 360);
+             return `hsl(${hue}, 50%, 45%)`;
+         }
+         
+         document.addEventListener("DOMContentLoaded", function () {
+         
+             const userName = "{{ current_user.username }}"
+             const avatar = document.getElementById('userAvatar');
+             const initialSpan = document.querySelector('.initial');
+         
+             if (userName && avatar && initialSpan) {
+                 const initial = userName.charAt(0).toUpperCase();
+                 const bgColor = generateColorFromName(userName);
+                 avatar.style.backgroundColor = bgColor;
+                 initialSpan.textContent = initial;
+             }
+         
+             function openRenameModal(filename) {
+                 const modal = document.getElementById('renameModal');
+                 const currentInput = document.getElementById('currentFilename');
+                 const newInput = document.getElementById('newFilename');
+         
+                 if (modal && currentInput && newInput) {
+                     currentInput.value = filename;
+                     newInput.value = filename;
+                     modal.classList.add('show');
+                     newInput.focus();
+                 }
+             }
+         
+             function closeRenameModal() {
+                 const modal = document.getElementById('renameModal');
+                 if (modal) {
+                     modal.classList.remove('show');
+                 }
+             }
+         
+             window.openRenameModal = openRenameModal;
+             window.closeRenameModal = closeRenameModal;
+         
+             const total_storage = "{{ total_storage }}";
+             const maxStorage = "{{ current_user.maxstorage }}";
+         
+             const storage_in_mb = "{{ total_storage_in_mb }}";
+             const storage_in_gb = "{{ total_storage_in_gb }}";
+         
+             let percentage = 0;
+             if (maxStorage > 0 && total_storage > 0) {
+                 percentage = Math.min((total_storage / maxStorage) * 100, 100);
+             }
+         
+             const progressFill = document.getElementById('progressFill');
+             if (progressFill) {
+                 progressFill.style.width = percentage + '%';
+             }
+         
+             const renameModal = document.getElementById('renameModal');
+             if (renameModal) {
+                 renameModal.addEventListener('click', function (e) {
+                     if (e.target === this) {
+                         closeRenameModal();
+                     }
+                 });
+             }
+         
+             document.addEventListener('keydown', function (e) {
+                 if (e.key === 'Escape') {
+                     closeRenameModal();
+                 }
+             });
+         });
+      </script>
+      <script>
+         const realFileInput = document.getElementById('real-file');
+         const fileNameSpan = document.getElementById('file-name');
+         
+         realFileInput.addEventListener('change', function () {
+             const file = this.files[0];
+             if (!file) {
+                 fileNameSpan.textContent = "No file chosen";
+                 return;
+             }
+         
+             let nameWithoutExtension = file.name.split('.').slice(0, -1).join('.') || file.name;
+             const extension = file.name.split('.').pop();
+         
+             if (nameWithoutExtension.length > 10) {
+                 const start = nameWithoutExtension.substring(0, 4);
+                 const end = nameWithoutExtension.substring(nameWithoutExtension.length - 6);
+                 nameWithoutExtension = `${start}_${end}`;
+             }
+         
+             fileNameSpan.textContent = `${nameWithoutExtension}.${extension}`;
+         });
+      </script>
+   </body>
+</html>
