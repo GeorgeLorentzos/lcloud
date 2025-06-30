@@ -1,4 +1,4 @@
-# LCloud - Personal Cloud Storage
+# LCloud - Cloud Storage
 
 A Flask-based cloud storage application that allows users to upload, manage, and store files securely. Features include user authentication, email verification, subscription management with Stripe, and file management capabilities.
 
