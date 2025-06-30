@@ -44,3 +44,5 @@
     ```bash
     python app.py
     ```
+    
+> This is a development template - not production-ready. Use as a starting point for building your own cloud storage application.
