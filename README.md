@@ -14,13 +14,29 @@ A Flask-based cloud storage application that allows users to upload, manage, and
 
 ## Tech Stack
 
-- **Backend**: Flask, SQLAlchemy, Flask-Login
-- **Database**: SQLite
-- **Payment Processing**: Stripe
-- **Email Service**: Flask-Mail (Gmail SMTP)
-- **Authentication**: Flask-Bcrypt
-- **File Handling**: Werkzeug
-- **Task Scheduling**: APScheduler
+```bash
+from flask import Flask, render_template, redirect, url_for, request, flash, send_from_directory, jsonify
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
+from flask_wtf import FlaskForm
+from wtforms import StringField, EmailField, PasswordField, SubmitField, FileField 
+from wtforms.validators import DataRequired
+from flask_bcrypt import Bcrypt
+import os
+import re
+import shutil
+from dotenv import load_dotenv
+from werkzeug.utils import secure_filename
+import stripe
+from pytz import timezone as pytz_timezone
+import pytz
+from flask_mail import Mail, Message
+import random
+from dateutil.relativedelta import relativedelta
+from apscheduler.schedulers.background import BackgroundScheduler
+import time
+from datetime import datetime
+```
 
 ## Prerequisites
 
@@ -37,50 +53,21 @@ git clone https://github.com/yourusername/lcloud.git
 cd lcloud
 ```
 
-### 2. Create Virtual Environment
-
-```bash
-python -m venv venv
-
-# On Windows
-venv\Scripts\activate
-
-# On macOS/Linux
-source venv/bin/activate
-```
-
 ### 3. Install Dependencies
 
 ```bash
 pip install flask flask-sqlalchemy flask-login flask-wtf wtforms flask-bcrypt python-dotenv werkzeug stripe pytz flask-mail python-dateutil apscheduler
 ```
 
-Or create a `requirements.txt` file:
+Or install `requirements.txt` file:
 
-```txt
-Flask==2.3.3
-Flask-SQLAlchemy==3.0.5
-Flask-Login==0.6.2
-Flask-WTF==1.1.1
-WTForms==3.0.1
-Flask-Bcrypt==1.0.1
-python-dotenv==1.0.0
-Werkzeug==2.3.7
-stripe==6.6.0
-pytz==2023.3
-Flask-Mail==0.9.1
-python-dateutil==2.8.2
-APScheduler==3.10.4
-```
-
-Then install:
 ```bash
 pip install -r requirements.txt
 ```
 
 ### 4. Environment Configuration
 
-Create a `.env` file in the root directory:
+If you already have a `.env` file, please verify it includes the following variables:
 
 ```env
 # Flask Configuration
@@ -96,36 +83,9 @@ STRIPE_SECRET_KEY=sk_test_your_secret_key
 STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
 ```
 
-## Configuration Guide
-
-### Gmail Setup
-
-1. **Enable 2-Factor Authentication** on your Gmail account
-2. **Generate App Password**:
-   - Go to Google Account settings
-   - Security → 2-Step Verification → App passwords
-   - Generate password for "Mail"
-   - Use this password in `MAIL_PASSWORD`
-
-### Stripe Setup
-
-1. **Create Stripe Account**: [https://stripe.com](https://stripe.com)
-2. **Get API Keys**:
-   - Dashboard → Developers → API keys
-   - Copy Publishable key and Secret key
-3. **Setup Webhook**:
-   - Dashboard → Developers → Webhooks
-   - Add endpoint: `http://your-domain.com/webhook`
-   - Select events: `checkout.session.completed`, `customer.subscription.deleted`
-   - Copy webhook secret
-
-### Database Setup
-
-The application will automatically create the SQLite database on first run. No additional setup required.
+Update the values as needed.
 
 ## Running the Application
-
-### Development Mode
 
 ```bash
 python app.py
@@ -133,29 +93,16 @@ python app.py
 
 The application will be available at `http://127.0.0.1:5000`
 
-### Production Deployment
-
-For production deployment, consider using:
-
-- **Gunicorn**: `pip install gunicorn`
-- **Nginx**: As reverse proxy
-- **PostgreSQL**: Instead of SQLite
-
-Example Gunicorn command:
-```bash
-gunicorn -w 4 -b 0.0.0.0:8000 app:app
-```
-
 ## Project Structure
 
 ```
 lcloud/
-├── app.py                 # Main application file
-├── .env                   # Environment variables
-├── requirements.txt       # Python dependencies
-├── lcloud.db             # SQLite database (auto-generated)
-├── storage/              # User file storage directory
-├── templates/            # HTML templates
+├── app.py            
+├── .env                   
+├── requirements.txt  
+├── lcloud.db          
+├── storage/          
+├── templates/          
 │   ├── dashboard.html
 │   ├── login.html
 │   ├── register.html
@@ -190,32 +137,6 @@ lcloud/
 3. Complete Stripe checkout process
 4. Manage subscription through billing portal
 
-## API Endpoints
-
-### Authentication
-- `GET/POST /signup` - User registration
-- `GET/POST /signin` - User login
-- `GET /logout` - User logout
-- `GET /verify/<token>` - Email verification
-
-### File Management
-- `GET/POST /` - Dashboard (file listing and upload)
-- `POST /delete/<filename>` - Delete file
-- `POST /rename` - Rename file
-
-### Account Management
-- `GET/POST /account` - Account settings
-- `POST /delete_account` - Delete user account
-
-### Subscription
-- `POST /create-checkout-session` - Create Stripe checkout
-- `POST /create-billing-portal-session` - Access billing portal
-- `POST /webhook` - Stripe webhook handler
-
-### Password Reset
-- `GET/POST /request-password-reset` - Request password reset
-- `GET/POST /verify/<token>` - Reset password with token
-
 ## Configuration Options
 
 ### Storage Limits
@@ -232,29 +153,6 @@ lcloud/
 - TLS encryption enabled
 - Template-based HTML emails
 
-## Troubleshooting
-
-### Common Issues
-
-1. **Email not sending**:
-   - Check Gmail app password
-   - Verify 2FA is enabled
-   - Check firewall settings
-
-2. **Stripe webhook not working**:
-   - Verify webhook URL is accessible
-   - Check webhook secret matches
-   - Ensure HTTPS in production
-
-3. **File upload fails**:
-   - Check storage directory permissions
-   - Verify storage quota not exceeded
-   - Check file size limits
-
-### Debug Mode
-
-Set `debug=True` in `app.run()` for detailed error messages during development.
-
 ## Security Considerations
 
 - Passwords are hashed using bcrypt
@@ -263,27 +161,9 @@ Set `debug=True` in `app.run()` for detailed error messages during development.
 - CSRF protection with Flask-WTF
 - Input validation on all forms
 
-## Contributing
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open Pull Request
-
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Copyright (c) 2025 George Lorentzos
 
-## Support
-
-For support, email your-email@example.com or create an issue on GitHub.
-
-## Changelog
-
-### v1.0.0
-- Initial release
-- User authentication system
-- File upload and management
-- Stripe subscription integration
-- Email verification and password reset
+Permission is granted to view this code for personal or educational purposes only. 
+Any reproduction, redistribution, or commercial use is prohibited without written permission.
