@@ -1,16 +1,29 @@
 # LCloud
 - A robust Python Flask web application for secure cloud storage and file management.
 
-## Features
-- Multi-user cloud storage platform with secure authentication
-- File upload and storage with intelligent size management
-- Premium subscription tiers with expanded storage capacity
-- Secure user data isolation and folder management
-- Email verification and password recovery system
-- Stripe payment integration for subscription management
-- Real-time storage usage tracking and quotas
-- Cross-timezone file management support
-- Modern responsive web interface
+## Key Features  
+### Security & Authentication  
+- Multi-layer user authentication with Flask-Login and bcrypt hashing  
+- Complete email verification system for new account activation  
+- Secure password recovery with time-limited tokens  
+- CSRF protection on all forms  
+
+### File Management  
+- User-isolated storage with dedicated folders  
+- Intelligent quota system (2GB free / 10GB premium)  
+- Secure file handling with Werkzeug's secure_filename()  
+- Timezone-aware timestamps (pytz integration)  
+
+### Subscription & Payments  
+- Stripe integration for premium subscriptions  
+- Automated billing portal for customers  
+- Webhook handling for payment events  
+- Tiered storage plans with automatic upgrades/downgrades  
+
+### Email System  
+- SMTP integration with TLS encryption  
+- Custom HTML templates for verification/reset emails  
+- Async email delivery (using Flask-Mail)  
 
 ## Usage
 1. Clone this repository:
