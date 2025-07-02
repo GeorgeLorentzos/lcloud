@@ -6,13 +6,25 @@
 - Multi-layer user authentication with Flask-Login and bcrypt hashing  
 - Complete email verification system for new account activation  
 - Secure password recovery with time-limited tokens  
-- CSRF protection on all forms  
+- CSRF protection on all forms
+
+### Account Management
+- User registration with email verification
+- Profile editing (username, email, password)
+- Account deletion with complete data purge
+- Timezone settings per user account
+- Email verification required for login
+- Password complexity enforcement
 
 ### File Management  
 - User-isolated storage with dedicated folders  
 - Intelligent quota system (2GB free / 10GB premium)  
 - Secure file handling with Werkzeug's secure_filename()  
-- Timezone-aware timestamps (pytz integration)  
+- Timezone-aware timestamps (pytz integration)
+- File renaming
+- File deletion
+- File size validation
+- Duplicate file prevention
 
 ### Subscription & Payments  
 - Stripe integration for premium subscriptions  
@@ -23,7 +35,8 @@
 ### Email System  
 - SMTP integration with TLS encryption  
 - Custom HTML templates for verification/reset emails  
-- Async email delivery (using Flask-Mail)  
+- Async email delivery (using Flask-Mail)
+- Token expiration system
 
 ## Usage
 1. Clone this repository:
