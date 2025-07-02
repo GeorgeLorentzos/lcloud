@@ -1,5 +1,5 @@
 # LCloud
-- A robust Python Flask web application for secure cloud storage and file management.
+- A secure and feature-rich Python Flask web application for cloud-based file storage and management, offering user authentication, file operations, subscription plans, and email verification.
 
 ## Key Features  
 ### Security & Authentication  
